@@ -38,9 +38,8 @@ on:
         required: false
         default: 'GitHub Actions ubuntu-latest runner (4 CPU, 16 GB RAM, 14 GB SSD, x64)'
       wandb_entity:
-        description: 'W&B entity name (leave empty to use your GitHub username; W&B logging is enabled only if WANDB_API_KEY is set)'
-        required: false
-        default: ''
+        description: 'W&B entity name (your W&B username or organization name)'
+        required: true
       num_paper_search_queries:
         description: 'Number of search queries'
         required: false
@@ -171,6 +170,9 @@ jobs:
         working-directory: backend
         run: uv sync --frozen
 
+      - name: Install jq
+        run: command -v jq || sudo apt-get update -y && sudo apt-get install -y jq
+
       - name: Start backend server
         working-directory: backend
         run: |
@@ -254,11 +256,7 @@ jobs:
           fi
 
           # === W&B config ===
-          # W&B logging is gated by the WANDB_API_KEY secret.
-          # Use provided entity, or fall back to the actor name.
-          if [ -z "$WANDB_ENTITY" ]; then
-            WANDB_ENTITY="${{ github.actor }}"
-          fi
+          WANDB_ENTITY="${{ github.event.inputs.wandb_entity }}"
 
           # === Build LLM mapping JSON ===
           LLM_MAPPING=$(cat <<EOFLLM
