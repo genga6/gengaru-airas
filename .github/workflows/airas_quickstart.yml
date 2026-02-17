@@ -155,7 +155,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: airas-org/airas
-          ref: develop
+          ref: feature/#699-add-feature-enable-arbitrary-users-to-execute-e2e-workflow
 
       - name: Install uv
         uses: astral-sh/setup-uv@v7
