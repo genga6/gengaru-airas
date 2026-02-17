@@ -2,7 +2,6 @@ name: AIRAS Quickstart
 
 # This workflow allows anyone to run the AIRAS end-to-end research pipeline
 # without requiring dedicated infrastructure.
-# The backend runs without a database (in-memory state) so no Postgres service is needed.
 #
 # See QUICKSTART.md or examples/github_actions/README.md for setup instructions and required secrets.
 
@@ -37,7 +36,7 @@ on:
       runner_description:
         description: 'Runner description'
         required: false
-        default: 'GitHub Actions ubuntu-latest runner'
+        default: 'GitHub Actions ubuntu-latest runner (4 CPU, 16 GB RAM, 14 GB SSD, x64)'
       wandb_entity:
         description: 'W&B entity name (leave empty to skip W&B logging)'
         required: false
@@ -135,8 +134,6 @@ jobs:
   e2e-test:
     runs-on: ubuntu-latest
     timeout-minutes: 4320  # 72 hours
-
-    # No database service required — the backend uses in-memory state when DATABASE_URL is unset.
 
     env:
       GH_PERSONAL_ACCESS_TOKEN: ${{ secrets.GH_PERSONAL_ACCESS_TOKEN }}
